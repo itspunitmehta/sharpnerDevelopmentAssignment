@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Parcel Sandbox</title>
+    <meta charset="UTF-8" />
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <h1>Appointment Booking App</h1>
+    <form onsubmit="saveToLocalStorage(event)">
+      <label> Username</label><br>
+      <input type="text" id="name" placeholder="Username" pattern="[A-Za-z0-9]+" 
+      title="letters and numbers only, no  punctuation or special characters"><required /><br>
+      <label> Email</label><br>
+      <input type="email" id="email" placeholder="xyz@mail.com" required /><br><br>
+      <input type="submit" id="submit" value="Sign Up" style="color:rgb(34, 16, 0); border: 2px solid rgb(3, 24, 27); background-color: rgb(255, 47, 57);" />
+    </form>
+    <ul id="users"></ul>
+    <script>
+      const submitButton = document.getElementById("submit");
+
+document.addEventListener("DOMContentLoaded", () => {
+    const localStorageObj = localStorage;
+    const localStorageKeys = Object.keys(localStorageObj);
+    // console.log(localStorageKeys);
+
+
+    for(var i=0;i<localStorageKeys.length;i++){
+        const keys = localStorageKeys[i];
+        // console.log(keys);
+
+        const upperDetailString = localStorageObj[keys];
+        // console.log(upperDetailString);
+
+        const userDeatilsObj = JSON.parse(upperDetailString);
+        // console.log(userDeatilsObj);
+
+        showUserOnScreen(userDeatilsObj);
+    }
+});
+const myForm = document.querySelector('#my-form');
+const nameInput = document.querySelector('#name');
+const emailInput = document.querySelector('#email');
+// myForm.addEventListener('submit', onSubmit);
+
+
+function saveToLocalStorage(event) {
+    event.preventDefault();
+
+    const myObj = {
+        name: nameInput.value,
+        email: emailInput.value
+};
+    
+    const jsonMyObj = JSON.stringify(myObj);
+    
+    localStorage.setItem(myObj.email,jsonMyObj);
+    const NotJsonMyobj = JSON.parse(localStorage.getItem(myObj.email));
+    // console.log(NotJsonMyobj);
+    showUserOnScreen(myObj);
+};
+
+function showUserOnScreen(user){
+
+    if(localStorage.getItem(user.email) !== null);
+    // console.log(localStorage.getItem(user.email));
+
+    removeUserFromScreen(user.email);
+
+    const parentNode = document.getElementById('users');
+    const childHTML = `<li id=${user.email}> ${user.name}- ${user.email} 
+                        <button style="border:2px solid red" onclick=deleteUser('${user.email}')> Delete User </button>
+                        <button style="border:2px solid green" onclick=editUserDetails('${user.email}','${user.name}')> Edit Details </button>
+    </li>`;
+
+    parentNode.innerHTML = parentNode.innerHTML + childHTML;
+    nameInput.value = '';
+    emailInput.value = '';
+}
+
+function deleteUser(emailId){
+    // console.log(emailId);
+    var result = confirm("Are you sure? Do you want to delete user?");
+    if(result){
+    localStorage.removeItem(emailId);
+    removeUserFromScreen(emailId);
+    {
+    alert("User deleted successfully!")
+    }
+    }
+    // alert("User deleted successfully!")
+
+}
+
+
+function editUserDetails(emailId, name){
+    document.getElementById('email').value = emailId;
+    document.getElementById('name').value = name;
+
+    deleteUser(emailId);
+}
+
+
+
+function removeUserFromScreen(emailId){
+    const parentNode = document.getElementById('users');
+    const childNodeToBeDeleted = document.getElementById(emailId);
+    console.log(childNodeToBeDeleted);
+    if(childNodeToBeDeleted){
+        parentNode.removeChild(childNodeToBeDeleted);
+    }
+}
+    </script>
+  </body>
+</html>
