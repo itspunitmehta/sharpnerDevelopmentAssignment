@@ -146,3 +146,9 @@ const creatPost = async (post)=>{
 }
 creatPost({title: "Post Three", body:"This is post two"});
 creatPost({title: "Post Four", body:"This is post two"});
+
+
+
+//in async await codes are much more readable than in the promises and most importantly 
+// in async await function inside async function works asynchronous, like when one function get execeuted only then
+//it will go to next line.
